@@ -33,9 +33,6 @@ const int HAND_JUST_BEFORE_TOUCH_SWITCH = 30;  // servo angle for the hand to to
 Servo handServo;  // Servo responsible for moving the hand
 Servo boxServo;   // Servo responsible for opening and closing the box
 
-int handPosition;
-int boxPosition;
-
 int switchStatus = 0;  // status that tells if the machine was activated
 int randomScene;       // used to select scene
 int servoDelay;
@@ -65,23 +62,19 @@ void moveServo(Servo myServo, int startPosition, int endPosition, int myDelay) {
 }
 
 void boxOpen(int myDelay = NORMAL) {
-    moveServo(boxServo, boxPosition, BOX_OPENED_POSITION, myDelay);
-    boxPosition = BOX_OPENED_POSITION;
+    moveServo(boxServo, boxServo.read(), BOX_OPENED_POSITION, myDelay);
 }
 
 void boxClose(int myDelay = NORMAL) {
-    moveServo(boxServo, boxPosition, BOX_CLOSED_POSITION, myDelay);
-    boxPosition = BOX_CLOSED_POSITION;
+    moveServo(boxServo, boxServo.read(), BOX_CLOSED_POSITION, myDelay);
 }
 
 void handOpen(int myDelay = NORMAL) {
-    moveServo(handServo, handPosition, HAND_ON_SWITCH_POSITION, myDelay);
-    handPosition = HAND_ON_SWITCH_POSITION;
+    moveServo(handServo, handServo.read(), HAND_ON_SWITCH_POSITION, myDelay);
 }
 
 void handClose(int myDelay = NORMAL) {
-    moveServo(handServo, handPosition, HAND_IN_BOX_POSITION, myDelay);
-    handPosition = HAND_IN_BOX_POSITION;
+    moveServo(handServo, handServo.read(), HAND_IN_BOX_POSITION, myDelay);
 }
 
 // open and closes box repeatedly
@@ -140,7 +133,7 @@ void deactivationPretender(int turns = 12, int positionA = 65, int positionB = 4
         moveServo(handServo, positionB, positionA, NORMAL);
     }
 
-    handServo.write(HAND_ON_SWITCH_POSITION);
+    handOpen(NORMAL);
     handClose(NORMAL);
     boxClose(NORMAL);
 }
@@ -166,9 +159,6 @@ void setup() {
 
     boxServo.write(BOX_CLOSED_POSITION);    // initialize box servo at the starting position
     handServo.write(HAND_IN_BOX_POSITION);  // initialize hand servo at the starting position
-
-    boxPosition = BOX_CLOSED_POSITION;
-    handPosition = HAND_IN_BOX_POSITION;
 
     randomSeed(analogRead(0));  // seed for random number
 }
