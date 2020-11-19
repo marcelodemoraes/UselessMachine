@@ -43,7 +43,7 @@ bool isFirstMovement = true;  // used to check if it is the first time the machi
 ************************************************************************************************/
 
 // generalize servo's movement depending the direction it's going and the delay between movement
-void moveServo(Servo myServo, int startPosition, int endPosition, int myDelay) {
+void moveServo(Servo myServo, int startPosition, int endPosition, int myDelay = NORMAL) {
     // in case it's an increasing position movement
     if (startPosition <= endPosition) {
         // position is the current servo's shaft angle
@@ -126,7 +126,7 @@ void angryBoxShaker() {
 
 void deactivationPretender(int turns = 12, int positionA = 65, int positionB = 40) {
     boxOpen(NORMAL);
-    moveServo(handServo, HAND_IN_BOX_POSITION, positionA, NORMAL);
+    moveServo(handServo, handServo.read(), positionA, NORMAL);
 
     for (int turn = 0; turn <= turns; turn++) {
         moveServo(handServo, positionA, positionB, NORMAL);
